@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Login</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/responsive.css">
+    <meta name="theme-color" content="#f19e36" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon/favicon.ico">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body class="login-page">
+
+    <div class="haeder">
+        <a href="index.html">
+            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 11.9299H2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.00009 19L2.84009 14C2.5677 13.7429 2.35071 13.433 2.20239 13.0891C2.05407 12.7452 1.97754 12.3745 1.97754 12C1.97754 11.6255 2.05407 11.2548 2.20239 10.9109C2.35071 10.567 2.5677 10.2571 2.84009 10L8.00009 5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="login-coins">
+        <img src="./assets/images/apple.svg" width="50px">
+        <span class="login-coins-count"></span>
+    </div>
+
+    <div class="login-page-detail">
+        <span>Loading your Telegram data...</span>
+    </div>
+
+    <script>
+        // Telegram WebApp API-Daten abrufen
+        if (window.Telegram.WebApp.initDataUnsafe) {
+            const user = window.Telegram.WebApp.initDataUnsafe.user;
+
+            if (user) {
+                // Telegram-Daten in Variablen speichern
+                const telegramId = user.id;
+                const firstName = user.first_name || "N/A";
+                const lastName = user.last_name || "N/A";
+                const username = user.username || "N/A";
+                const langCode = user.language_code || "en";
+                const coins = localStorage.getItem('coins') || 0;
+
+                // Automatische Weiterleitung zu user_data.php mit POST-Daten
+                const form = document.createElement('form');
+                form.method = "POST";
+                form.action = "./assets/php/user_data.php";
+
+                const telegramIdInput = document.createElement('input');
+                telegramIdInput.type = "hidden";
+                telegramIdInput.name = "telegramm_id";
+                telegramIdInput.value = telegramId;
+
+                const firstNameInput = document.createElement('input');
+                firstNameInput.type = "hidden";
+                firstNameInput.name = "first_name";
+                firstNameInput.value = firstName;
+
+                const lastNameInput = document.createElement('input');
+                lastNameInput.type = "hidden";
+                lastNameInput.name = "last_name";
+                lastNameInput.value = lastName;
+
+                const usernameInput = document.createElement('input');
+                usernameInput.type = "hidden";
+                usernameInput.name = "user_name";
+                usernameInput.value = username;
+
+                const langCodeInput = document.createElement('input');
+                langCodeInput.type = "hidden";
+                langCodeInput.name = "lang_code";
+                langCodeInput.value = langCode;
+
+                const coinsInput = document.createElement('input');
+                coinsInput.type = "hidden";
+                coinsInput.name = "coins";
+                coinsInput.value = coins;
+
+                // Inputs zum Formular hinzufügen
+                form.appendChild(telegramIdInput);
+                form.appendChild(firstNameInput);
+                form.appendChild(lastNameInput);
+                form.appendChild(usernameInput);
+                form.appendChild(langCodeInput);
+                form.appendChild(coinsInput);
+
+                // Formular zur Seite hinzufügen und absenden
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                document.querySelector('.login-page-detail span').textContent = "Failed to load Telegram data.";
+            }
+        } else {
+            document.querySelector('.login-page-detail span').textContent = "Telegram WebApp API not available.";
+        }
+    </script>
+</body>
+</html>

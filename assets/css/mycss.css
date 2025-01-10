@@ -1,0 +1,45 @@
+/* Neues CSS für die Container */
+.fullscreen-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Vollbildhöhe */
+    background-color: rgba(0, 0, 0, 0.95); /* Hintergrund wie das alte CSS */
+}
+
+.image-container {
+    position: relative;
+    width: 90%;
+    max-width: 1200px; /* Maximale Breite des Containers */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px; /* Runde Ecken wie beim alten Design */
+}
+
+/* H1 und Text-Stile */
+.text-container {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.text-container h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #f19e36; /* Themenfarbe */
+}
+
+.text-container p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #c1c1c1;
+}
