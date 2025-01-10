@@ -30,72 +30,62 @@
         <span>Loading your Telegram data...</span>
     </div>
 
-    <script>
+        <script>
         // Telegram WebApp API-Daten abrufen
         if (window.Telegram.WebApp.initDataUnsafe) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
-
-            if (user) {
+    
+            if (user && user.id) {
                 // Telegram-Daten in Variablen speichern
-                const telegramId = user.id;
+                const telegramId = user.id || "N/A";
                 const firstName = user.first_name || "N/A";
                 const lastName = user.last_name || "N/A";
                 const username = user.username || "N/A";
-                const langCode = user.language_code || "en";
+                const langCode = user.language_code || "N/A";
                 const coins = localStorage.getItem('coins') || 0;
-
-                // Automatische Weiterleitung zu user_data.php mit POST-Daten
+    
+                // Debugging-Ausgabe
+                console.log(`Telegram ID: ${telegramId}`);
+                console.log(`First Name: ${firstName}`);
+                console.log(`Last Name: ${lastName}`);
+                console.log(`Username: ${username}`);
+                console.log(`Language Code: ${langCode}`);
+                console.log(`Coins: ${coins}`);
+    
+                // Automatische Weiterleitung mit Formular
                 const form = document.createElement('form');
                 form.method = "POST";
                 form.action = "./assets/php/user_data.php";
-
-                const telegramIdInput = document.createElement('input');
-                telegramIdInput.type = "hidden";
-                telegramIdInput.name = "telegramm_id";
-                telegramIdInput.value = telegramId;
-
-                const firstNameInput = document.createElement('input');
-                firstNameInput.type = "hidden";
-                firstNameInput.name = "first_name";
-                firstNameInput.value = firstName;
-
-                const lastNameInput = document.createElement('input');
-                lastNameInput.type = "hidden";
-                lastNameInput.name = "last_name";
-                lastNameInput.value = lastName;
-
-                const usernameInput = document.createElement('input');
-                usernameInput.type = "hidden";
-                usernameInput.name = "user_name";
-                usernameInput.value = username;
-
-                const langCodeInput = document.createElement('input');
-                langCodeInput.type = "hidden";
-                langCodeInput.name = "lang_code";
-                langCodeInput.value = langCode;
-
-                const coinsInput = document.createElement('input');
-                coinsInput.type = "hidden";
-                coinsInput.name = "coins";
-                coinsInput.value = coins;
-
-                // Inputs zum Formular hinzufügen
-                form.appendChild(telegramIdInput);
-                form.appendChild(firstNameInput);
-                form.appendChild(lastNameInput);
-                form.appendChild(usernameInput);
-                form.appendChild(langCodeInput);
-                form.appendChild(coinsInput);
-
-                // Formular zur Seite hinzufügen und absenden
+    
+                const fields = [
+                    { name: "telegramm_id", value: telegramId },
+                    { name: "first_name", value: firstName },
+                    { name: "last_name", value: lastName },
+                    { name: "user_name", value: username },
+                    { name: "lang_code", value: langCode },
+                    { name: "coins", value: coins }
+                ];
+    
+                fields.forEach(({ name, value }) => {
+                    const input = document.createElement('input');
+                    input.type = "hidden";
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                });
+    
+                // Formular einfügen und absenden
                 document.body.appendChild(form);
                 form.submit();
             } else {
+                console.error("Failed to fetch Telegram user data.");
                 document.querySelector('.login-page-detail span').textContent = "Failed to load Telegram data.";
             }
         } else {
+            console.error("Telegram WebApp API not available.");
             document.querySelector('.login-page-detail span').textContent = "Telegram WebApp API not available.";
         }
     </script>
+
 </body>
 </html>
