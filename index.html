@@ -28,13 +28,16 @@
 
     <div class="login-page-detail">
         <span>Loading your Telegram data...</span>
+        <div id="telegram-data">
+            <!-- Hier werden die Telegram-Daten angezeigt -->
+        </div>
     </div>
 
-        <script>
+    <script>
         // Telegram WebApp API-Daten abrufen
         if (window.Telegram.WebApp.initDataUnsafe) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
-    
+
             if (user && user.id) {
                 // Telegram-Daten in Variablen speichern
                 const telegramId = user.id || "N/A";
@@ -43,40 +46,45 @@
                 const username = user.username || "N/A";
                 const langCode = user.language_code || "N/A";
                 const coins = localStorage.getItem('coins') || 0;
-    
-                // Debugging-Ausgabe
-                console.log(`Telegram ID: ${telegramId}`);
-                console.log(`First Name: ${firstName}`);
-                console.log(`Last Name: ${lastName}`);
-                console.log(`Username: ${username}`);
-                console.log(`Language Code: ${langCode}`);
-                console.log(`Coins: ${coins}`);
-    
-                // Automatische Weiterleitung mit Formular
-                const form = document.createElement('form');
-                form.method = "POST";
-                form.action = "./assets/php/user_data.php";
-    
-                const fields = [
-                    { name: "telegramm_id", value: telegramId },
-                    { name: "first_name", value: firstName },
-                    { name: "last_name", value: lastName },
-                    { name: "user_name", value: username },
-                    { name: "lang_code", value: langCode },
-                    { name: "coins", value: coins }
-                ];
-    
-                fields.forEach(({ name, value }) => {
-                    const input = document.createElement('input');
-                    input.type = "hidden";
-                    input.name = name;
-                    input.value = value;
-                    form.appendChild(input);
-                });
-    
-                // Formular einfügen und absenden
-                document.body.appendChild(form);
-                form.submit();
+
+                // Telegram-Daten auf der Seite anzeigen
+                const telegramDataDiv = document.getElementById('telegram-data');
+                telegramDataDiv.innerHTML = `
+                    <p><strong>Telegram ID:</strong> ${telegramId}</p>
+                    <p><strong>First Name:</strong> ${firstName}</p>
+                    <p><strong>Last Name:</strong> ${lastName}</p>
+                    <p><strong>Username:</strong> ${username}</p>
+                    <p><strong>Language Code:</strong> ${langCode}</p>
+                    <p><strong>Coins:</strong> ${coins}</p>
+                `;
+
+                // Nach 5 Sekunden weiterleiten
+                setTimeout(() => {
+                    const form = document.createElement('form');
+                    form.method = "POST";
+                    form.action = "./assets/php/user_data.php";
+
+                    const fields = [
+                        { name: "telegramm_id", value: telegramId },
+                        { name: "first_name", value: firstName },
+                        { name: "last_name", value: lastName },
+                        { name: "user_name", value: username },
+                        { name: "lang_code", value: langCode },
+                        { name: "coins", value: coins }
+                    ];
+
+                    fields.forEach(({ name, value }) => {
+                        const input = document.createElement('input');
+                        input.type = "hidden";
+                        input.name = name;
+                        input.value = value;
+                        form.appendChild(input);
+                    });
+
+                    // Formular einfügen und absenden
+                    document.body.appendChild(form);
+                    form.submit();
+                }, 5000); // 5 Sekunden warten
             } else {
                 console.error("Failed to fetch Telegram user data.");
                 document.querySelector('.login-page-detail span').textContent = "Failed to load Telegram data.";
