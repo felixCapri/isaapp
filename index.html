@@ -29,7 +29,7 @@
     <div class="login-page-detail">
         <span>Loading your Telegram data...</span>
         <div id="telegram-data">
-            <!-- Hier werden die Telegram-Daten angezeigt -->
+            <!-- Telegram-Daten werden hier angezeigt -->
         </div>
     </div>
 
@@ -60,30 +60,8 @@
 
                 // Nach 5 Sekunden weiterleiten
                 setTimeout(() => {
-                    const form = document.createElement('form');
-                    form.method = "POST";
-                    form.action = "./assets/php/user_data.php";
-
-                    const fields = [
-                        { name: "telegramm_id", value: telegramId },
-                        { name: "first_name", value: firstName },
-                        { name: "last_name", value: lastName },
-                        { name: "user_name", value: username },
-                        { name: "lang_code", value: langCode },
-                        { name: "coins", value: coins }
-                    ];
-
-                    fields.forEach(({ name, value }) => {
-                        const input = document.createElement('input');
-                        input.type = "hidden";
-                        input.name = name;
-                        input.value = value;
-                        form.appendChild(input);
-                    });
-
-                    // Formular einfügen und absenden
-                    document.body.appendChild(form);
-                    form.submit();
+                    const url = `./assets/php/user_data.php?telegramm_id=${telegramId}&first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&user_name=${encodeURIComponent(username)}&lang_code=${encodeURIComponent(langCode)}&coins=${coins}`;
+                    window.location.href = url;
                 }, 5000); // 5 Sekunden warten
             } else {
                 console.error("Failed to fetch Telegram user data.");
